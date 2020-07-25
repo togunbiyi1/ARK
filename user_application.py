@@ -154,7 +154,7 @@ class UserApp:
             user_app_logger.info("selecting only viable rows")
             combo_df = combo_df[combo_df["viable"] == 1]
             combo_df.sort_values(by=["score"], ascending=False, inplace=True)
-            ser_app_logger.info("finishing flat_viability")
+            user_app_logger.info("finishing flat_viability")
             return combo_df.reset_index(drop=True)
 
         except Exception as e:
