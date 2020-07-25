@@ -1,9 +1,5 @@
-import os, sys
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing import MultiLabelBinarizer
-from sklearn.metrics.pairwise import cosine_similarity
-import scipy.sparse
 pd.set_option('display.max_columns', None)
 
 
