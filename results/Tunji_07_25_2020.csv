@@ -1,3 +1,0 @@
-,match,score,score_type,viable,zones,prices
-0,Theo Walcott,0.8408436255927582,average,1,"{'zones': ['Zone 1', 'Zone 2', 'Zone 6']}","{'prices': ['0-500', '500-599', '800-899']}"
-1,Marie Kondo,0.8062445856709604,average,1,"{'zones': ['Zone 1', 'Zone 6']}","{'prices': ['600-699', '700-799', '800-899']}"
