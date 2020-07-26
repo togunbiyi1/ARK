@@ -13,10 +13,10 @@ main_logger = get_logger("ark.main")
 
 if __name__ == '__main__':
 
-    main_logger.info("*"*5 + " starting main ark application " "*"*5)
+    main_logger.info("*"*5 + " starting main ark application " + "*"*5)
     try:
         main_logger.info("initiate DataManager object")
-        run_through = DataManager(responses_filename='responses/ark_responses_2.csv')
+        run_through = DataManager(responses_filename='responses/ark_responses_3.csv')
         main_logger.info("running run_data_manager")
         score_dict = run_through.run_data_manager()
 

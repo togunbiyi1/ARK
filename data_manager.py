@@ -12,6 +12,7 @@ class DataManager:
     def __init__(self, responses_filename):
         data_manager_logger.info("starting __init__ for DataManager")
         self.response_df = pd.read_csv(responses_filename)
+        self.response_df.drop_duplicates(subset='Bio: Name', keep="last", inplace=True)
         self.response_df.set_index('Bio: Name', inplace=True)
         self.response_df.index.name = None
         timestamps = self.response_df['Timestamp']
@@ -33,25 +34,25 @@ class DataManager:
             for column in df.columns:
 
                 if "Bio" in column:
-                    data_manager_logger.info("adding column: {} to Bio")
+                    data_manager_logger.info("adding column: {} to Bio".format(column))
                     bio_questions.append(column)
                 elif "Preferences" in column:
-                    data_manager_logger.info("adding column: {} to Preferences")
+                    data_manager_logger.info("adding column: {} to Preferences".format(column))
                     pref_questions.append(column)
                 elif "Interests" in column:
-                    data_manager_logger.info("adding column: {} to Interests")
+                    data_manager_logger.info("adding column: {} to Interests".format(column))
                     int_questions.append(column)
                 elif "Habits" in column:
-                    data_manager_logger.info("adding column: {} to Habits")
+                    data_manager_logger.info("adding column: {} to Habits".format(column))
                     hab_questions.append(column)
                 elif "Personality" in column:
-                    data_manager_logger.info("adding column: {} to Personality")
+                    data_manager_logger.info("adding column: {} to Personality".format(column))
                     pers_questions.append(column)
                 elif "Flat" in column:
-                    data_manager_logger.info("adding column: {} to Flat")
+                    data_manager_logger.info("adding column: {} to Flat".format(column))
                     flat_questions.append(column)
                 elif "Extra" in column:
-                    data_manager_logger.info("adding column: {} to Extra")
+                    data_manager_logger.info("adding column: {} to Extra".format(column))
                     extra_questions.append(column)
                 else:
                     print(column)

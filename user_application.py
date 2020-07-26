@@ -17,6 +17,7 @@ class UserApp:
         self.personality_score_cos_matrix = score_dict["personality_score_cos_matrix"][[self.name]]
         self.flat_info = score_dict["flat_info"]
 
+
     def flat_df_match(self, flat_df, names_tuple):
         user_app_logger.info("starting flat_df_match")
         try:
