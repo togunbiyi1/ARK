@@ -1,6 +1,7 @@
 import pandas as pd
 from datetime import datetime
 from data_manager import DataManager
+from scoring import BulkScoring
 from user_application import UserApp
 import warnings
 from logging_config import get_logger
@@ -16,13 +17,18 @@ if __name__ == '__main__':
     main_logger.info("*"*5 + " starting main ark application " + "*"*5)
     try:
         main_logger.info("initiate DataManager object")
-        run_through = DataManager(responses_filename='responses/ark_responses_3.csv')
+        data_manager = DataManager(responses_filename='responses/ark_responses_3.csv')
         main_logger.info("running run_data_manager")
-        score_dict = run_through.run_data_manager()
+        data_manager.save_tables()
+
+        main_logger.info("initiate BulkScoring object")
+        scoring_manager = BulkScoring(data_dir='data_tables')
+        main_logger.info("running scoring_manager")
+        score_dict = scoring_manager.run_bulk_scoring()
 
         users = list(score_dict["user_info"].index)
     except Exception as e:
-        main_logger.error("Error running DataManager: {}".format(e))
+        main_logger.error("Error running DataManager or BulkScoring: {}".format(e))
         raise e
 
     for user in users:
