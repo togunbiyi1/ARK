@@ -80,25 +80,25 @@ class DataManager:
             bio_df, pref_df, int_df, habit_df, pers_df, flat_df, extra_df = self.sort_responses(self.response_df)
 
             data_manager_logger.info("saving bio_df")
-            bio_df.to_csv('data_tables/bio_df.csv', index=False)
+            bio_df.to_csv('data_tables/bio_df.csv')
 
             data_manager_logger.info("saving pref_df")
-            pref_df.to_csv('data_tables/pref_df.csv', index=False)
+            pref_df.to_csv('data_tables/pref_df.csv')
 
             data_manager_logger.info("saving int_df")
-            int_df.to_csv('data_tables/int_df.csv', index=False)
+            int_df.to_csv('data_tables/int_df.csv')
 
             data_manager_logger.info("saving habit_df")
-            habit_df.to_csv('data_tables/habit_df.csv', index=False)
+            habit_df.to_csv('data_tables/habit_df.csv')
 
             data_manager_logger.info("saving pers_df")
-            pers_df.to_csv('data_tables/pers_df.csv', index=False)
+            pers_df.to_csv('data_tables/pers_df.csv')
 
             data_manager_logger.info("saving flat_df")
-            flat_df.to_csv('data_tables/flat_df.csv', index=False)
+            flat_df.to_csv('data_tables/flat_df.csv')
 
             data_manager_logger.info("saving extra_df")
-            extra_df.to_csv('data_tables/extra_df.csv', index=False)
+            extra_df.to_csv('data_tables/extra_df.csv')
         except Exception as e:
             data_manager_logger.error("Error in sort_responses: {}".format(e))
             raise e
