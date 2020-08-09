@@ -2,6 +2,7 @@ import pandas as pd
 from datetime import datetime
 from data_manager import DataManager
 from scoring import BulkScoring, SingleScoring
+from email_manager import EmailManager
 from user_application import UserApp
 import warnings
 from logging_config import get_logger
@@ -23,13 +24,18 @@ if __name__ == '__main__':
     main_logger.info("*"*5 + " starting main ark application " + "*"*5)
 
     def main(mode, user_name=None):
+
+        try:
+            main_logger.info("initiate DataManager object")
+            data_manager = DataManager(responses_filename='responses/ark_responses_3.csv')
+            main_logger.info("running run_data_manager")
+            data_manager.save_tables()
+        except Exception as e:
+            main_logger.error("Error running DataManager: {}".format(e))
+            raise e
+
         if mode == 'bulk':
             try:
-                main_logger.info("initiate DataManager object")
-                data_manager = DataManager(responses_filename='responses/ark_responses_3.csv')
-                main_logger.info("running run_data_manager")
-                data_manager.save_tables()
-
                 main_logger.info("initiate BulkScoring object")
                 scoring_manager = BulkScoring(data_dir='data_tables')
                 main_logger.info("running scoring_manager")
@@ -37,13 +43,13 @@ if __name__ == '__main__':
 
                 users = list(score_dict["user_info"].index)
             except Exception as e:
-                main_logger.error("Error running DataManager or BulkScoring: {}".format(e))
+                main_logger.error("Error running BulkScoring: {}".format(e))
                 raise e
 
             for user in users:
                 try:
                     main_logger.info("initiate UserApp object for user: {}".format(user))
-                    app = UserApp(name=user, score_dict=score_dict)
+                    app = UserApp(name=user, score_dict=score_dict, data_dir='data_tables')
                     main_logger.info("creating matches df for user: {}".format(user))
                     matches_df = app.flat_viability()
                     main_logger.info("saving matches for user: {}".format(user))
@@ -55,31 +61,32 @@ if __name__ == '__main__':
 
         elif mode == 'single':
             try:
-                main_logger.info("initiate DataManager object")
-                data_manager = DataManager(responses_filename='responses/ark_responses_3.csv')
-                main_logger.info("running run_data_manager")
-                data_manager.save_tables()
-
-                main_logger.info("initiate BulkScoring object")
+                main_logger.info("initiate SingleScoring object")
                 scoring_manager = SingleScoring(data_dir='data_tables', user_name=user_name)
                 main_logger.info("running scoring_manager")
                 score_dict = scoring_manager.run_single_scoring()
-
-                users = list(score_dict["user_info"].index)
             except Exception as e:
-                main_logger.error("Error running DataManager or BulkScoring: {}".format(e))
+                main_logger.error("Error running SingleScoring: {}".format(e))
                 raise e
 
             try:
                 main_logger.info("initiate UserApp object for user: {}".format(user_name))
-                app = UserApp(name=user_name, score_dict=score_dict)
+                app = UserApp(name=user_name, score_dict=score_dict, data_dir='data_tables')
                 main_logger.info("creating matches df for user: {}".format(user_name))
-                matches_df = app.flat_viability()
+                matches_df = app.add_contact_details()
                 main_logger.info("saving matches for user: {}".format(user_name))
-                matches_df.to_csv('results/{}_{}.csv'.format('single_test', datetime.today().strftime("%m_%d_%Y")))
+                csv_filename = 'results/{}_{}.csv'.format('single_test', datetime.today().strftime("%m_%d_%Y"))
+                matches_df.to_csv(csv_filename)
                 print(matches_df)
             except Exception as e:
                 main_logger.error("Error running UserApp: {}".format(e))
+                raise e
+
+            try:
+                emailer = EmailManager(name=user_name, csv_filename=csv_filename)
+                emailer.send_message()
+            except Exception as e:
+                main_logger.error("Error running EmailManager: {}".format(e))
                 raise e
 
     main(mode='single', user_name='Tunji')

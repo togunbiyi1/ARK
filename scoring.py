@@ -3,6 +3,7 @@ import pandas as pd
 from sklearn.preprocessing import MultiLabelBinarizer
 from sklearn.metrics.pairwise import cosine_similarity
 from logging_config import get_logger
+from utils import set_indexes
 
 pd.set_option('display.max_columns', None)
 
@@ -12,22 +13,14 @@ scoring_logger = get_logger("ark.scoring")
 class Scoring:
     def __init__(self, data_dir):
         scoring_logger.info("starting __init__ for BulkScoring")
-        self.bio_df = self.set_indexes(pd.read_csv('{}/bio_df.csv'.format(data_dir)))
-        self.pref_df = self.set_indexes(pd.read_csv('{}/pref_df.csv'.format(data_dir)))
-        self.int_df = self.set_indexes(pd.read_csv('{}/int_df.csv'.format(data_dir)))
-        self.habit_df = self.set_indexes(pd.read_csv('{}/habit_df.csv'.format(data_dir)))
-        self.pers_df = self.set_indexes(pd.read_csv('{}/pers_df.csv'.format(data_dir)))
-        self.flat_df = self.set_indexes(pd.read_csv('{}/flat_df.csv'.format(data_dir)))
-        self.extra_df = self.set_indexes(pd.read_csv('{}/extra_df.csv'.format(data_dir)))
+        self.bio_df = set_indexes(pd.read_csv('{}/bio_df.csv'.format(data_dir)))
+        self.pref_df = set_indexes(pd.read_csv('{}/pref_df.csv'.format(data_dir)))
+        self.int_df = set_indexes(pd.read_csv('{}/int_df.csv'.format(data_dir)))
+        self.habit_df = set_indexes(pd.read_csv('{}/habit_df.csv'.format(data_dir)))
+        self.pers_df = set_indexes(pd.read_csv('{}/pers_df.csv'.format(data_dir)))
+        self.flat_df = set_indexes(pd.read_csv('{}/flat_df.csv'.format(data_dir)))
+        self.extra_df = set_indexes(pd.read_csv('{}/extra_df.csv'.format(data_dir)))
 
-    @staticmethod
-    def set_indexes(df):
-        new_columns = df.columns.values
-        new_columns[0] = 'Name'
-        df.columns = new_columns
-        df.set_index('Name', inplace=True)
-        df.index.name = None
-        return df
 
     @staticmethod
     def flat_helper_function(flat_df):

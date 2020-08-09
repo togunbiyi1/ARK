@@ -29,6 +29,7 @@ class DataManager:
             pers_questions = []
             flat_questions = []
             extra_questions = []
+            contact_questions = []
 
             for column in df.columns:
 
@@ -53,6 +54,9 @@ class DataManager:
                 elif "Extra" in column:
                     data_manager_logger.info("adding column: {} to Extra".format(column))
                     extra_questions.append(column)
+                elif "Contact" in column:
+                    data_manager_logger.info("adding column: {} to Contact".format(column))
+                    contact_questions.append(column)
                 else:
                     print(column)
 
@@ -64,10 +68,11 @@ class DataManager:
             pers_df = df[pers_questions]
             flat_df = df[flat_questions]
             extra_df = df[extra_questions]
+            contact_df = df[contact_questions]
 
             data_manager_logger.info("finishing sort_responses")
 
-            return bio_df, pref_df, int_df, habit_df, pers_df, flat_df, extra_df
+            return bio_df, pref_df, int_df, habit_df, pers_df, flat_df, extra_df, contact_df
 
         except Exception as e:
             data_manager_logger.error("Error in sort_responses: {}".format(e))
@@ -77,7 +82,14 @@ class DataManager:
         data_manager_logger.info("starting save_tables")
         try:
             data_manager_logger.info("calling sort_responses")
-            bio_df, pref_df, int_df, habit_df, pers_df, flat_df, extra_df = self.sort_responses(self.response_df)
+            bio_df, \
+            pref_df, \
+            int_df, \
+            habit_df, \
+            pers_df, \
+            flat_df, \
+            extra_df, \
+            contact_df = self.sort_responses(self.response_df)
 
             data_manager_logger.info("saving bio_df")
             bio_df.to_csv('data_tables/bio_df.csv')
@@ -99,6 +111,9 @@ class DataManager:
 
             data_manager_logger.info("saving extra_df")
             extra_df.to_csv('data_tables/extra_df.csv')
+
+            data_manager_logger.info("saving contact_df")
+            contact_df.to_csv('data_tables/contact_df.csv')
         except Exception as e:
             data_manager_logger.error("Error in sort_responses: {}".format(e))
             raise e
