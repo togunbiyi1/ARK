@@ -83,8 +83,10 @@ if __name__ == '__main__':
                 raise e
 
             try:
-                emailer = EmailManager(name=user_name, csv_filename=csv_filename)
-                emailer.send_message()
+                main_logger.info("initiate EmailManager object for user: {}".format(user_name))
+                mailer = EmailManager(name=user_name, csv_filename=csv_filename)
+                mailer.send_message()
+                main_logger.info(" email sent for user: {}".format(user_name))
             except Exception as e:
                 main_logger.error("Error running EmailManager: {}".format(e))
                 raise e
