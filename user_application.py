@@ -1,12 +1,13 @@
 import pandas as pd
 import numpy as np
 from logging_config import get_logger
+from utils import set_indexes
 pd.set_option('display.max_columns', None)
 
 user_app_logger = get_logger("ark.user_app")
 
 class UserApp:
-    def __init__(self, name, score_dict):
+    def __init__(self, name, score_dict, data_dir):
         user_app_logger.info("starting __init__ for UserApp")
         self.name = name
         self.user_info = score_dict["user_info"].loc[score_dict["user_info"].index == name]
@@ -16,6 +17,7 @@ class UserApp:
         self.habit_score_cos_matrix = score_dict["habit_score_cos_matrix"][[self.name]]
         self.personality_score_cos_matrix = score_dict["personality_score_cos_matrix"][[self.name]]
         self.flat_info = score_dict["flat_info"]
+        self.contact_df = set_indexes(pd.read_csv('{}/contact_df.csv'.format(data_dir)))
 
     def flat_df_match(self, flat_df, names_tuple):
         user_app_logger.info("starting flat_df_match")
@@ -23,12 +25,15 @@ class UserApp:
             # TODO Maybe move column to a config file
 
             user_app_logger.info("creating filter columns")
-            zone_filter_columns = ["Zone 1",
-                                   "Zone 2",
-                                   "Zone 3",
-                                   "Zone 4",
-                                   "Zone 5",
-                                   "Zone 6",
+            zone_filter_columns = ["Edinburgh",
+                                   "London Zone 1",
+                                   "London Zone 2",
+                                   "London Zone 3",
+                                   "London Zone 4",
+                                   "London Zone 5",
+                                   "London Zone 6",
+                                   "Oxford",
+                                   "Southampton",
                                    ]
 
             price_filter_columns = [
@@ -160,3 +165,21 @@ class UserApp:
         except Exception as e:
             user_app_logger.error("Error in flat_viability: {}".format(e))
             raise e
+
+    def add_contact_details(self):
+        try:
+            user_app_logger.info('starting add_contact_details')
+            combo_df = self.flat_viability()
+            contact_df = self.contact_df.reset_index().rename(columns={'index': 'name'})
+            user_app_logger.info('merging combo_df and contact_df')
+            result_df = pd.merge(combo_df,
+                                 contact_df,
+                                 left_on="match",
+                                 right_on="name",
+                                 how='left').drop(columns=["name"])
+            user_app_logger.info('finishing add_contact_details')
+            return result_df
+        except Exception as e:
+            user_app_logger.error("Error in flat_viability: {}".format(e))
+            raise e
+

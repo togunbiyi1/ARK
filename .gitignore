@@ -2,3 +2,8 @@
 *.log
 *.xml
 *.pyc
+*.
+*.gform
+credentials.py
+*.json
+*.pickle
