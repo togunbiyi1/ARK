@@ -4,12 +4,16 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 import pandas as pd
+from logging_config import get_logger
 
 warnings.filterwarnings('ignore')
 pd.set_option('display.max_columns', 500)
 pd.set_option('display.width', 1000)
 
+google_api_manager_logger = get_logger("ark.google_api_manager")
+
 def gsheet_api_check(SCOPES):
+    google_api_manager_logger.info("running gsheet_api_check")
     creds = None
     if os.path.exists('token.pickle'):
         with open('token.pickle', 'rb') as token:
@@ -27,6 +31,7 @@ def gsheet_api_check(SCOPES):
 
 
 def pull_sheet_data(SCOPES, SPREADSHEET_ID, RANGE_NAME):
+    google_api_manager_logger.info("running pull_sheet_data")
     creds = gsheet_api_check(SCOPES)
     service = build('sheets', 'v4', credentials=creds)
     sheet = service.spreadsheets()
@@ -46,7 +51,7 @@ def pull_sheet_data(SCOPES, SPREADSHEET_ID, RANGE_NAME):
 
 
 def run_gsheets_manager():
-
+    google_api_manager_logger.info("running run_gsheets_manager")
     SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
     SPREADSHEET_ID = '1MwhS_L7JEDlr0a7wwIzI7rtDHjoKF0Uf84hr0htN5C8'
     RANGE_NAME = 'Form responses 1'
