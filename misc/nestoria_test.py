@@ -1,4 +1,3 @@
-from nestoria import search_listings, _get_results
 import requests
 from fake_useragent import UserAgent
 
