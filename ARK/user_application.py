@@ -26,12 +26,12 @@ class UserApp:
 
             user_app_logger.info("creating filter columns")
             zone_filter_columns = ["Edinburgh",
-                                   "London Zone 1",
-                                   "London Zone 2",
-                                   "London Zone 3",
-                                   "London Zone 4",
-                                   "London Zone 5",
-                                   "London Zone 6",
+                                   "Zone 1",
+                                   "Zone 2",
+                                   "Zone 3",
+                                   "Zone 4",
+                                   "Zone 5",
+                                   "Zone 6",
                                    "Oxford",
                                    "Southampton",
                                    ]
